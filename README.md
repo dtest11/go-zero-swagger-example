@@ -28,20 +28,20 @@ var spec []byte
 var configFile = flag.String("f", "etc/greet.yaml", "the config file")
 
 const (
-	swaggerPath = "/api/doc"
-	JsonPath    = "/api/greet.json"
-	Titile      = "title"
+	swaggerAPI     = "/api/doc"
+	SwaggerJsonAPI = "/api/greet.json"
+	Title          = "title"
 )
 
 var swaggerHandle http.Handler = v5emb.New(
-	Titile,
-	JsonPath,
-	swaggerPath,
+	Title,
+	SwaggerJsonAPI,
+	swaggerAPI,
 )
 
 func Notfound() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if strings.HasPrefix(r.URL.Path, swaggerPath) {
+		if strings.HasPrefix(r.URL.Path, swaggerAPI) {
 			swaggerHandle.ServeHTTP(w, r)
 			return
 		}
@@ -63,7 +63,7 @@ func main() {
 	// swagger  json file
 	server.AddRoute(rest.Route{
 		Method: http.MethodGet,
-		Path:   JsonPath,
+		Path:   SwaggerJsonAPI,
 		Handler: func(w http.ResponseWriter, r *http.Request) {
 			_, _ = w.Write(spec)
 		},
@@ -77,6 +77,7 @@ func main() {
 	fmt.Println("doc: http://localhost:8888/api/doc")
 	server.Start()
 }
+
 ```
 
 #Test 
@@ -89,5 +90,5 @@ make r
 ```
 you can check  by http://localhost:8888/api/doc
 
-<img src="greet.jpg" alt="Alt Text" width="500" height="300">
+<img src="greet.jpg" alt="Alt Text" width="800" height="500">
 
